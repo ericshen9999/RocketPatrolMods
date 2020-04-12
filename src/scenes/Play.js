@@ -53,16 +53,34 @@ class Play extends Phaser.Scene{
             fixedWidth: 100,
         }
         this.scoreLeft = this.add.text(69,54,this.p1Score,scoreConfig);
+        //game over
+        this.gameOver = false;
+        // 60 second clock
+        scoreConfig.fixedWidth = 0;
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER',scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, '(F)ire to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
+        }, null, this);
     }
 
     update(){
+        //restart
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)){
+            this.scene.restart(this.p1Score);
+        }
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)){
+            this.scene.start('menuScene');
+        }
         //scroll
         this.starfield.tilePositionX -= 4
         //update rocket
-        this.p1Rocket.update();
-        this.ship01.update();
-        this.ship02.update();
-        this.ship03.update();
+        if(!this.gameOver){
+            this.p1Rocket.update();
+            this.ship01.update();
+            this.ship02.update();
+            this.ship03.update();
+        }
         //check collision
         if(this.checkCollision(this.p1Rocket,this.ship01)){
             this.p1Rocket.reset();
@@ -101,5 +119,7 @@ class Play extends Phaser.Scene{
         //score increase
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+        //sound
+        this.sound.play('sfx_explosion');
     }
 }
