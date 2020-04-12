@@ -30,4 +30,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.y = 431;
         }
     }
+    
+    reset(){
+        this.isFiring = false;
+        this.y = 431;
+    }
 }
