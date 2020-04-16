@@ -9,14 +9,6 @@ class Rocket extends Phaser.GameObjects.Sprite {
     }
 
     update(){
-        if(!this.isFiring){
-            if(keyLEFT.isDown && this.x >= 47){
-                this.x -= 2;
-            } else if (keyRIGHT .isDown && this.x <= 578)
-            {
-                this.x += 2;
-            }
-        }
         //Fire button
         if(Phaser.Input.Keyboard.JustDown(keyF)){
             if(!this.isFiring){
@@ -26,7 +18,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         }
         //If fired
         if(this.isFiring && this.y >= 108){
-            this.y -=2;
+            this.y -= 2;
         }
         //Reset
         if(this.y <= 108){
